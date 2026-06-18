@@ -116,7 +116,7 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
         </DialogHeader>
 
         <Tabs defaultValue="lists">
-          <TabsList>
+          <TabsList className="grid w-full grid-cols-2 sm:inline-grid sm:w-auto">
             <TabsTrigger value="lists">Lists</TabsTrigger>
             <TabsTrigger value="categories">Categories</TabsTrigger>
             <TabsTrigger value="data">Backup</TabsTrigger>

@@ -142,7 +142,82 @@ export function ListView({ onEdit, onAddNew }: ListViewProps) {
         ))}
       </div>
 
-      <div className="overflow-hidden rounded-[var(--radius-lg)] border border-base-700">
+      <div className="flex flex-col gap-2 md:hidden">
+        {subs.map(({ sub, nextDate }) => {
+          const cat = categoryById.get(sub.categoryId);
+          const isCanceled = sub.status === 'canceled';
+          return (
+            <div
+              key={sub.id}
+              className={cn(
+                'rounded-[var(--radius-lg)] border border-base-700 bg-base-900 p-3',
+                isCanceled && 'opacity-50'
+              )}
+            >
+              <div className="flex items-start justify-between gap-2">
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    <span className="truncate font-medium text-sm text-base-50">{sub.name}</span>
+                    {highlightBadge(sub.highlight)}
+                  </div>
+                  <div className="mt-1 flex flex-wrap items-center gap-1.5 text-[12px] text-base-400">
+                    <span className="inline-flex items-center gap-1">
+                      <span className="size-2 rounded-full" style={{ backgroundColor: cat?.color }} />
+                      {cat?.name ?? '—'}
+                    </span>
+                    <span aria-hidden="true">·</span>
+                    <span>
+                      {CYCLE_LABEL[sub.billingCycle]}
+                      {sub.billingCycle === 'custom' && sub.customIntervalDays
+                        ? ` (${sub.customIntervalDays}d)`
+                        : ''}
+                    </span>
+                  </div>
+                </div>
+                <div className="shrink-0 text-right">
+                  <div className="font-mono-num text-sm font-medium text-base-50">
+                    {formatINR(sub.amount)}
+                  </div>
+                  <div className="font-mono-num text-[11px] text-base-400">
+                    {nextDate === '9999-99-99'
+                      ? '—'
+                      : new Date(nextDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                  </div>
+                </div>
+              </div>
+              <div className="mt-2.5 flex items-center justify-between">
+                <Badge variant={isCanceled ? 'coral' : 'mint'}>{isCanceled ? 'Canceled' : 'Active'}</Badge>
+                <div className="flex items-center gap-1">
+                  <Button variant="ghost" size="icon-sm" onClick={() => onEdit(sub.id)} title="Edit">
+                    <Pencil className="size-3.5" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon-sm"
+                    onClick={() => toggleStatus(sub.id)}
+                    title={isCanceled ? 'Reactivate' : 'Cancel'}
+                  >
+                    {isCanceled ? <CheckCircle className="size-3.5" /> : <Ban className="size-3.5" />}
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon-sm"
+                    onClick={() => {
+                      if (confirm(`Delete "${sub.name}"? This cannot be undone.`)) deleteSubscription(sub.id);
+                    }}
+                    title="Delete"
+                    className="hover:text-coral"
+                  >
+                    <Trash2 className="size-3.5" />
+                  </Button>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="hidden overflow-hidden rounded-[var(--radius-lg)] border border-base-700 md:block">
         <table className="w-full">
           <thead>
             <tr className="border-b border-base-700 bg-base-850">

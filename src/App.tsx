@@ -22,6 +22,7 @@ function AppShell() {
   const [editId, setEditId] = React.useState<string | null>(null);
   const [defaultDate, setDefaultDate] = React.useState<string | null>(null);
   const [settingsOpen, setSettingsOpen] = React.useState(false);
+  const [sidebarOpen, setSidebarOpen] = React.useState(false);
 
   const openAddDialog = () => {
     setEditId(null);
@@ -43,20 +44,33 @@ function AppShell() {
 
   return (
     <div className="flex h-screen overflow-hidden bg-base-900">
-      <Sidebar onOpenSettings={() => setSettingsOpen(true)} />
+      <Sidebar
+        onOpenSettings={() => setSettingsOpen(true)}
+        mobileOpen={sidebarOpen}
+        onMobileClose={() => setSidebarOpen(false)}
+      />
 
-      <div className="flex flex-1 flex-col overflow-hidden">
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+
+      <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
         <TopBar
           view={view}
           onViewChange={setView}
           monthDate={monthDate}
           onMonthChange={setMonthDate}
           onAddSubscription={openAddDialog}
+          onOpenSidebar={() => setSidebarOpen(true)}
         />
 
-        <main className="flex-1 overflow-y-auto p-6">
+        <main className="flex-1 overflow-y-auto p-3 sm:p-6">
           {view === 'calendar' && (
-            <div className="grid grid-cols-[1fr_300px] gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-4 lg:gap-6">
               <CalendarGrid
                 monthDate={monthDate}
                 onSelectSubscription={openEditDialog}

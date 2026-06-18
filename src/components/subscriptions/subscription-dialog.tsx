@@ -189,7 +189,7 @@ export function SubscriptionDialog({ open, onOpenChange, editId, defaultDate }: 
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div className="flex flex-col gap-1.5">
               <Label>List</Label>
               <Select value={form.listId} onValueChange={(v) => setForm((f) => ({ ...f, listId: v }))}>
@@ -252,7 +252,7 @@ export function SubscriptionDialog({ open, onOpenChange, editId, defaultDate }: 
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="sub-amount">Amount (₹)</Label>
               <Input
@@ -297,7 +297,7 @@ export function SubscriptionDialog({ open, onOpenChange, editId, defaultDate }: 
             </div>
           )}
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="sub-start">
                 {form.billingCycle === 'one-time'
@@ -345,7 +345,7 @@ export function SubscriptionDialog({ open, onOpenChange, editId, defaultDate }: 
 
           <div className="flex flex-col gap-1.5">
             <Label>Highlight</Label>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               {HIGHLIGHT_OPTIONS.map((opt) => (
                 <button
                   key={opt.value}
@@ -400,7 +400,7 @@ export function SubscriptionDialog({ open, onOpenChange, editId, defaultDate }: 
           )}
         </div>
 
-        <DialogFooter className={cn(editingSub && 'justify-between sm:justify-between')}>
+        <DialogFooter className={cn('flex-wrap', editingSub && 'justify-between sm:justify-between')}>
           {editingSub ? (
             <Button variant="ghost" onClick={handleDelete} className="text-coral hover:bg-coral/10 hover:text-coral mr-auto">
               <Trash2 className="size-4" />

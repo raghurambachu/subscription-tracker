@@ -63,9 +63,9 @@ function buildMonthCells(monthDate: Date, occurrences: BillingOccurrence[]): Day
 }
 
 function highlightIcon(flag: string) {
-  if (flag === 'annual') return <Star className="size-2.5" />;
-  if (flag === 'trial') return <Sparkles className="size-2.5" />;
-  if (flag === 'one-time') return <PackageCheck className="size-2.5" />;
+  if (flag === 'annual') return <Star className="size-2 sm:size-2.5" />;
+  if (flag === 'trial') return <Sparkles className="size-2 sm:size-2.5" />;
+  if (flag === 'one-time') return <PackageCheck className="size-2 sm:size-2.5" />;
   return null;
 }
 
@@ -96,15 +96,15 @@ export function CalendarGrid({ monthDate, onSelectSubscription, onSelectDate }: 
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="grid grid-cols-7 gap-2">
+      <div className="grid grid-cols-7 gap-1 sm:gap-2">
         {WEEKDAY_NAMES_SHORT.map((d) => (
-          <div key={d} className="px-2 py-1 text-center text-[11px] font-semibold uppercase tracking-wider text-base-400">
+          <div key={d} className="px-1 py-1 text-center text-[10px] font-semibold uppercase tracking-wider text-base-400 sm:px-2 sm:text-[11px]">
             {d}
           </div>
         ))}
       </div>
 
-      <div className="grid grid-cols-7 gap-2">
+      <div className="grid grid-cols-7 gap-1 sm:gap-2">
         {cells.map((cell, i) => {
           const isToday = isSameDay(cell.date, today);
           const dayTotal = cell.occurrences
@@ -118,7 +118,7 @@ export function CalendarGrid({ monthDate, onSelectSubscription, onSelectDate }: 
               disabled={!cell.inMonth}
               onClick={!hasOccurrences && cell.inMonth ? () => onSelectDate(iso) : undefined}
               className={cn(
-                'group relative flex h-[104px] flex-col rounded-[var(--radius-md)] border p-2.5 text-left transition-all',
+                'group relative flex h-[84px] flex-col overflow-hidden rounded-[var(--radius-md)] border p-1 text-left transition-all sm:h-[104px] sm:p-2.5',
                 cell.inMonth
                   ? 'border-base-700 bg-base-850 hover:border-violet/50'
                   : 'border-transparent bg-transparent opacity-30',
@@ -129,7 +129,7 @@ export function CalendarGrid({ monthDate, onSelectSubscription, onSelectDate }: 
               <span className="flex items-center justify-between">
                 <span
                   className={cn(
-                    'font-mono-num text-[13px]',
+                    'font-mono-num text-[12px] sm:text-[13px]',
                     cell.inMonth ? 'text-base-300' : 'text-base-500',
                     isToday && 'font-bold text-violet'
                   )}
@@ -137,13 +137,13 @@ export function CalendarGrid({ monthDate, onSelectSubscription, onSelectDate }: 
                   {cell.date.getDate()}
                 </span>
                 {cell.inMonth && !hasOccurrences && (
-                  <Plus className="size-3.5 text-base-500 opacity-0 transition-opacity group-hover:opacity-100" />
+                  <Plus className="size-3 text-base-500 opacity-0 transition-opacity group-hover:opacity-100 sm:size-3.5" />
                 )}
               </span>
 
               {hasOccurrences && (
                 <>
-                  <div className="mt-1.5 flex flex-wrap gap-1">
+                  <div className="mt-1 flex flex-wrap gap-0.5 sm:mt-1.5 sm:gap-1">
                     {cell.occurrences.slice(0, 6).map((o, idx) => {
                       const cat = categoryById.get(o.subscription.categoryId);
                       const isCanceled = o.subscription.status === 'canceled';
@@ -151,7 +151,8 @@ export function CalendarGrid({ monthDate, onSelectSubscription, onSelectDate }: 
                         <span
                           key={o.subscription.id + idx}
                           className={cn(
-                            'coin-dot flex size-[18px] items-center justify-center rounded-full text-white shadow-sm',
+                            'coin-dot flex size-[14px] items-center justify-center rounded-full text-white shadow-sm sm:size-[18px]',
+                            idx >= 3 && 'hidden sm:flex',
                             isCanceled && 'opacity-35 grayscale'
                           )}
                           style={{
@@ -163,13 +164,18 @@ export function CalendarGrid({ monthDate, onSelectSubscription, onSelectDate }: 
                         </span>
                       );
                     })}
+                    {cell.occurrences.length > 3 && (
+                      <span className="flex size-[14px] items-center justify-center rounded-full bg-base-600 text-[9px] font-semibold text-base-200 sm:hidden">
+                        +{cell.occurrences.length - 3}
+                      </span>
+                    )}
                     {cell.occurrences.length > 6 && (
-                      <span className="flex size-[18px] items-center justify-center rounded-full bg-base-600 text-[9px] font-semibold text-base-200">
+                      <span className="hidden size-[18px] items-center justify-center rounded-full bg-base-600 text-[9px] font-semibold text-base-200 sm:flex">
                         +{cell.occurrences.length - 6}
                       </span>
                     )}
                   </div>
-                  <div className="mt-auto font-mono-num text-[11px] font-medium text-base-200">
+                  <div className="mt-auto truncate font-mono-num text-[10px] font-medium text-base-200 sm:text-[11px]">
                     {dayTotal > 0 ? formatINR(dayTotal) : ''}
                   </div>
                 </>

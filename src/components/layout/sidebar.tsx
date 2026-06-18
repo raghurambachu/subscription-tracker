@@ -9,9 +9,11 @@ import { ThemeToggle } from '@/components/layout/theme-toggle';
 
 interface SidebarProps {
   onOpenSettings: () => void;
+  mobileOpen?: boolean;
+  onMobileClose?: () => void;
 }
 
-export function Sidebar({ onOpenSettings }: SidebarProps) {
+export function Sidebar({ onOpenSettings, mobileOpen, onMobileClose }: SidebarProps) {
   const { data, setSelectedListId } = useAppState();
   const [addListOpen, setAddListOpen] = React.useState(false);
 
@@ -26,8 +28,20 @@ export function Sidebar({ onOpenSettings }: SidebarProps) {
   const activeCountForList = (listId: string | 'all') =>
     data.subscriptions.filter((s) => s.status === 'active' && (listId === 'all' || s.listId === listId)).length;
 
+  const selectList = (id: string | 'all') => {
+    setSelectedListId(id);
+    onMobileClose?.();
+  };
+
   return (
-    <aside className="flex h-screen w-64 shrink-0 flex-col border-r border-base-700 bg-base-950">
+    <aside
+      className={cn(
+        'flex h-screen shrink-0 flex-col border-r border-base-700 bg-base-950',
+        'fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] transition-transform duration-300 ease-out',
+        mobileOpen ? 'translate-x-0' : '-translate-x-full',
+        'lg:static lg:z-auto lg:w-64 lg:max-w-none lg:translate-x-0 lg:transition-none'
+      )}
+    >
       <div className="flex items-center gap-2.5 px-5 py-5">
         <div className="flex size-8 items-center justify-center rounded-[var(--radius-md)] bg-violet shadow-[0_4px_12px_-2px_rgba(108,92,231,0.5)]">
           <CalendarDays className="size-4.5 text-white" />
@@ -41,7 +55,7 @@ export function Sidebar({ onOpenSettings }: SidebarProps) {
         </div>
 
         <button
-          onClick={() => setSelectedListId('all')}
+          onClick={() => selectList('all')}
           className={cn(
             'group flex w-full items-center justify-between rounded-[var(--radius-md)] px-3 py-2.5 text-sm transition-colors',
             data.selectedListId === 'all'
@@ -60,7 +74,7 @@ export function Sidebar({ onOpenSettings }: SidebarProps) {
           {data.lists.map((list) => (
             <button
               key={list.id}
-              onClick={() => setSelectedListId(list.id)}
+              onClick={() => selectList(list.id)}
               className={cn(
                 'group flex w-full items-center justify-between rounded-[var(--radius-md)] px-3 py-2.5 text-sm transition-colors',
                 data.selectedListId === list.id
@@ -113,7 +127,15 @@ export function Sidebar({ onOpenSettings }: SidebarProps) {
       </div>
 
       <div className="border-t border-base-700 p-3">
-        <Button variant="ghost" size="sm" className="w-full justify-start gap-2.5 text-base-300" onClick={onOpenSettings}>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="w-full justify-start gap-2.5 text-base-300"
+          onClick={() => {
+            onOpenSettings();
+            onMobileClose?.();
+          }}
+        >
           <Settings className="size-4" />
           Lists, categories & data
         </Button>

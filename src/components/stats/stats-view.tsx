@@ -123,34 +123,34 @@ export function StatsView() {
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
         <Card>
-          <CardContent className="p-5">
+          <CardContent className="p-4 sm:p-5">
             <div className="flex items-center gap-2 text-base-400">
               <Wallet className="size-3.5" />
               <span className="text-[11px] font-semibold uppercase tracking-wider">Yearly budget</span>
             </div>
-            <div className="mt-2 font-display text-2xl font-semibold text-base-50">{formatINR(yearlyTotal)}</div>
+            <div className="mt-2 font-display text-xl font-semibold text-base-50 sm:text-2xl">{formatINR(yearlyTotal)}</div>
             <div className="mt-0.5 text-[11px] text-base-400">projected over 12 months</div>
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="p-5">
+          <CardContent className="p-4 sm:p-5">
             <div className="flex items-center gap-2 text-base-400">
               <CalendarRange className="size-3.5" />
               <span className="text-[11px] font-semibold uppercase tracking-wider">Avg. monthly</span>
             </div>
-            <div className="mt-2 font-display text-2xl font-semibold text-base-50">{formatINR(monthlyAvg)}</div>
+            <div className="mt-2 font-display text-xl font-semibold text-base-50 sm:text-2xl">{formatINR(monthlyAvg)}</div>
             <div className="mt-0.5 text-[11px] text-base-400">average cost per month</div>
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="p-5">
+          <CardContent className="p-4 sm:p-5">
             <div className="flex items-center gap-2 text-base-400">
               <Crown className="size-3.5" />
               <span className="text-[11px] font-semibold uppercase tracking-wider">Peak month</span>
             </div>
-            <div className="mt-2 font-display text-2xl font-semibold text-base-50">
+            <div className="mt-2 font-display text-xl font-semibold text-base-50 sm:text-2xl">
               {peakMonth ? peakMonth.label : '—'}
             </div>
             <div className="mt-0.5 text-[11px] text-base-400">
@@ -159,12 +159,12 @@ export function StatsView() {
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="p-5">
+          <CardContent className="p-4 sm:p-5">
             <div className="flex items-center gap-2 text-base-400">
               <TrendingUp className="size-3.5" />
               <span className="text-[11px] font-semibold uppercase tracking-wider">Active subs</span>
             </div>
-            <div className="mt-2 font-display text-2xl font-semibold text-base-50">{totalActiveCount}</div>
+            <div className="mt-2 font-display text-xl font-semibold text-base-50 sm:text-2xl">{totalActiveCount}</div>
             <div className="mt-0.5 text-[11px] text-base-400">
               across {data.selectedListId === 'all' ? data.lists.length : 1} list{data.selectedListId === 'all' && data.lists.length !== 1 ? 's' : ''}
             </div>
@@ -172,7 +172,7 @@ export function StatsView() {
         </Card>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <Card>
           <CardHeader>
             <CardTitle>Spend by category</CardTitle>
@@ -183,8 +183,8 @@ export function StatsView() {
                 No active subscriptions
               </div>
             ) : (
-              <div className="flex items-center gap-4">
-                <div className="h-[240px] w-[240px] shrink-0">
+              <div className="flex flex-col items-center gap-4 sm:flex-row">
+                <div className="h-[200px] w-full max-w-[240px] shrink-0 sm:h-[240px] sm:w-[240px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                       <Pie
@@ -214,7 +214,7 @@ export function StatsView() {
                     </PieChart>
                   </ResponsiveContainer>
                 </div>
-                <div className="flex flex-1 flex-col gap-2.5 overflow-y-auto max-h-[240px] scrollbar-none">
+                <div className="flex w-full flex-1 flex-col gap-2.5 overflow-y-auto max-h-[240px] scrollbar-none">
                   {byCategory.map((c) => (
                     <div key={c.categoryId} className="flex items-center gap-2 text-sm">
                       <span className="size-2.5 rounded-full shrink-0" style={{ backgroundColor: c.color }} />
