@@ -1,0 +1,222 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@theme {
+  /* ===== Typography ===== */
+  --font-display: "Space Grotesk", "Inter", sans-serif;
+  --font-sans: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", "Menlo", monospace;
+
+  /* ===== Core palette (values come from :root / .light below) ===== */
+  --color-base-950: var(--c-base-950);
+  --color-base-900: var(--c-base-900);
+  --color-base-850: var(--c-base-850);
+  --color-base-800: var(--c-base-800);
+  --color-base-700: var(--c-base-700);
+  --color-base-600: var(--c-base-600);
+  --color-base-500: var(--c-base-500);
+  --color-base-400: var(--c-base-400);
+  --color-base-300: var(--c-base-300);
+  --color-base-200: var(--c-base-200);
+  --color-base-100: var(--c-base-100);
+  --color-base-50: var(--c-base-50);
+
+  --color-violet: var(--c-violet);
+  --color-violet-dim: var(--c-violet-dim);
+  --color-violet-soft: var(--c-violet-soft);
+
+  --color-mint: var(--c-mint);
+  --color-mint-dim: var(--c-mint-dim);
+  --color-mint-soft: var(--c-mint-soft);
+
+  --color-coral: var(--c-coral);
+  --color-coral-dim: var(--c-coral-dim);
+  --color-coral-soft: var(--c-coral-soft);
+
+  --color-amber: var(--c-amber);
+  --color-amber-dim: var(--c-amber-dim);
+  --color-amber-soft: var(--c-amber-soft);
+
+  --color-sky: var(--c-sky);
+  --color-pink: var(--c-pink);
+  --color-lime: var(--c-lime);
+  --color-orange: var(--c-orange);
+
+  /* ===== Radii ===== */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.625rem;
+  --radius-lg: 0.875rem;
+  --radius-xl: 1.25rem;
+}
+
+/* ===== Dark theme (default) ===== */
+:root {
+  --c-base-950: #0a0b0d;
+  --c-base-900: #0f1115;
+  --c-base-850: #14171c;
+  --c-base-800: #1a1e24;
+  --c-base-700: #232830;
+  --c-base-600: #2d333d;
+  --c-base-500: #3d4452;
+  --c-base-400: #5a6272;
+  --c-base-300: #8a909c;
+  --c-base-200: #b8bcc4;
+  --c-base-100: #e4e6ea;
+  --c-base-50: #fafaf7;
+
+  --c-violet: #6c5ce7;
+  --c-violet-dim: #5849c4;
+  --c-violet-soft: #6c5ce71a;
+
+  --c-mint: #00d9a3;
+  --c-mint-dim: #00b386;
+  --c-mint-soft: #00d9a31a;
+
+  --c-coral: #ff6b6b;
+  --c-coral-dim: #e85555;
+  --c-coral-soft: #ff6b6b1a;
+
+  --c-amber: #ffb84d;
+  --c-amber-dim: #e6a13d;
+  --c-amber-soft: #ffb84d1a;
+
+  --c-sky: #4da8ff;
+  --c-pink: #ff6fb5;
+  --c-lime: #a3e635;
+  --c-orange: #ff9f4d;
+
+  --card-inset-highlight: rgba(255, 255, 255, 0.04);
+}
+
+/* ===== Light theme ===== */
+.light {
+  /* Surfaces invert: 950/900 (deepest dark) becomes the most distant *light* surface,
+     50 (near-white text) becomes the darkest ink. Same relationships, new direction. */
+  --c-base-950: #ffffff;
+  --c-base-900: #f7f7f5;
+  --c-base-850: #f0f0ed;
+  --c-base-800: #e8e8e4;
+  --c-base-700: #dcdcd6;
+  --c-base-600: #c7c7bf;
+  --c-base-500: #9d9d93;
+  --c-base-400: #76766c;
+  --c-base-300: #57574f;
+  --c-base-200: #3c3c36;
+  --c-base-100: #232320;
+  --c-base-50: #15150f;
+
+  /* Accents slightly deepened so they hold contrast on light surfaces instead of glowing */
+  --c-violet: #5b4bd6;
+  --c-violet-dim: #4a3bc2;
+  --c-violet-soft: #6c5ce71f;
+
+  --c-mint: #00a884;
+  --c-mint-dim: #00916f;
+  --c-mint-soft: #00a8841f;
+
+  --c-coral: #e6534f;
+  --c-coral-dim: #d13f3b;
+  --c-coral-soft: #e6534f1f;
+
+  --c-amber: #d68f1f;
+  --c-amber-dim: #bd7b15;
+  --c-amber-soft: #d68f1f1f;
+
+  --c-sky: #1f7fe0;
+  --c-pink: #d6488e;
+  --c-lime: #6a9417;
+  --c-orange: #d97a1f;
+
+  --card-inset-highlight: rgba(15, 15, 10, 0.03);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-base-700);
+  }
+  html {
+    color-scheme: dark;
+  }
+  html.light {
+    color-scheme: light;
+  }
+  body {
+    background-color: var(--color-base-900);
+    color: var(--color-base-50);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+  ::selection {
+    background-color: var(--color-violet-soft);
+    color: var(--color-base-50);
+  }
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--color-base-600);
+    border-radius: 8px;
+    border: 2px solid transparent;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-base-500);
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+  }
+  .font-mono-num {
+    font-family: var(--font-mono);
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+}
+
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 var(--color-violet-soft); }
+  70% { box-shadow: 0 0 0 6px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+
+.pulse-today {
+  animation: pulse-ring 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes coin-drop {
+  0% { transform: translateY(-4px) scale(0.6); opacity: 0; }
+  60% { transform: translateY(1px) scale(1.05); opacity: 1; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.coin-dot {
+  animation: coin-drop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.3s ease-out backwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
