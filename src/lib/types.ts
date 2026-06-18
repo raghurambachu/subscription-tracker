@@ -24,7 +24,7 @@ export interface Subscription {
   listId: string;
   name: string;
   categoryId: string;
-  amount: number; // in INR
+  amount: number; // in the app's selected currency
   billingCycle: BillingCycle;
   customIntervalDays?: number; // for 'custom' cycle, e.g. every 45 days
   startDate: string; // ISO date string YYYY-MM-DD
@@ -46,6 +46,7 @@ export interface AppData {
   selectedListId: string | 'all';
   settings: {
     notificationsEnabled: boolean;
+    currency: string; // ISO 4217 code, e.g. 'INR', 'USD'
   };
 }
 

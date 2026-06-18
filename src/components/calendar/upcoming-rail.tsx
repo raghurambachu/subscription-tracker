@@ -2,7 +2,6 @@ import * as React from 'react';
 import { useAppState } from '@/hooks/use-app-state';
 import {
   getNextBillingDate,
-  formatINR,
   daysUntil,
   toISODate,
 } from '@/lib/date-utils';
@@ -21,7 +20,7 @@ function highlightIcon(flag: string) {
 }
 
 export function UpcomingRail({ onSelectSubscription }: UpcomingRailProps) {
-  const { data } = useAppState();
+  const { data, formatMoney } = useAppState();
 
   const upcoming = React.useMemo(() => {
     const now = new Date();
@@ -88,7 +87,7 @@ export function UpcomingRail({ onSelectSubscription }: UpcomingRailProps) {
               </span>
             </span>
             <span className="flex flex-col items-end gap-1 shrink-0">
-              <span className="font-mono-num text-sm font-medium text-base-100">{formatINR(sub.amount)}</span>
+              <span className="font-mono-num text-sm font-medium text-base-100">{formatMoney(sub.amount)}</span>
               {isUrgent && <Badge variant="coral">{days === 0 ? 'today' : 'tomorrow'}</Badge>}
             </span>
           </button>

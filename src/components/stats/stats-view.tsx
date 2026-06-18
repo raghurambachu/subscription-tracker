@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useAppState } from '@/hooks/use-app-state';
-import { getAnnualizedCost, getMonthlyCost, formatINR, MONTH_NAMES_SHORT } from '@/lib/date-utils';
+import { getAnnualizedCost, getMonthlyCost, MONTH_NAMES_SHORT, CURRENCIES } from '@/lib/date-utils';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import {
   PieChart,
@@ -33,8 +33,9 @@ const CHART_COLORS = {
 };
 
 export function StatsView() {
-  const { data } = useAppState();
+  const { data, formatMoney } = useAppState();
   const chartColors = CHART_COLORS;
+  const currencySymbol = CURRENCIES[data.settings.currency]?.symbol ?? '₹';
 
   const activeSubs = React.useMemo(
     () =>
@@ -130,7 +131,7 @@ export function StatsView() {
               <Wallet className="size-3.5" />
               <span className="text-[11px] font-semibold uppercase tracking-wider">Yearly budget</span>
             </div>
-            <div className="mt-2 font-display text-xl font-semibold text-base-50 sm:text-2xl">{formatINR(yearlyTotal)}</div>
+            <div className="mt-2 font-display text-xl font-semibold text-base-50 sm:text-2xl">{formatMoney(yearlyTotal)}</div>
             <div className="mt-0.5 text-[11px] text-base-400">projected over 12 months</div>
           </CardContent>
         </Card>
@@ -140,7 +141,7 @@ export function StatsView() {
               <CalendarRange className="size-3.5" />
               <span className="text-[11px] font-semibold uppercase tracking-wider">Avg. monthly</span>
             </div>
-            <div className="mt-2 font-display text-xl font-semibold text-base-50 sm:text-2xl">{formatINR(monthlyAvg)}</div>
+            <div className="mt-2 font-display text-xl font-semibold text-base-50 sm:text-2xl">{formatMoney(monthlyAvg)}</div>
             <div className="mt-0.5 text-[11px] text-base-400">average cost per month</div>
           </CardContent>
         </Card>
@@ -154,7 +155,7 @@ export function StatsView() {
               {peakMonth ? peakMonth.label : '—'}
             </div>
             <div className="mt-0.5 text-[11px] text-base-400">
-              {peakMonth ? formatINR(peakMonth.total) : 'no recurring charges'}
+              {peakMonth ? formatMoney(peakMonth.total) : 'no recurring charges'}
             </div>
           </CardContent>
         </Card>
@@ -202,7 +203,7 @@ export function StatsView() {
                         ))}
                       </Pie>
                       <RTooltip
-                        formatter={(value) => formatINR(Number(value))}
+                        formatter={(value) => formatMoney(Number(value))}
                         contentStyle={{
                           backgroundColor: chartColors.tooltipBg,
                           border: `1px solid ${chartColors.tooltipBorder}`,
@@ -219,7 +220,7 @@ export function StatsView() {
                     <div key={c.categoryId} className="flex items-center gap-2 text-sm">
                       <span className="size-2.5 rounded-full shrink-0" style={{ backgroundColor: c.color }} />
                       <span className="flex-1 truncate text-base-200">{c.name}</span>
-                      <span className="font-mono-num text-base-50">{formatINR(c.value)}</span>
+                      <span className="font-mono-num text-base-50">{formatMoney(c.value)}</span>
                       <span className="w-10 shrink-0 text-right text-[11px] text-base-400">
                         {Math.round((c.value / yearlyTotal) * 100)}%
                       </span>
@@ -252,10 +253,10 @@ export function StatsView() {
                     fontSize={11}
                     tickLine={false}
                     axisLine={false}
-                    tickFormatter={(v) => `₹${v >= 1000 ? `${Math.round(v / 1000)}k` : v}`}
+                    tickFormatter={(v) => `${currencySymbol}${v >= 1000 ? `${Math.round(v / 1000)}k` : v}`}
                   />
                   <RTooltip
-                    formatter={(value) => formatINR(Number(value))}
+                    formatter={(value) => formatMoney(Number(value))}
                     contentStyle={{
                       backgroundColor: chartColors.tooltipBg,
                       border: `1px solid ${chartColors.tooltipBorder}`,
@@ -307,7 +308,7 @@ export function StatsView() {
                       />
                     </div>
                     <span className="w-24 shrink-0 text-right font-mono-num text-sm text-base-50">
-                      {formatINR(listYearly)}/yr
+                      {formatMoney(listYearly)}/yr
                     </span>
                   </div>
                 );

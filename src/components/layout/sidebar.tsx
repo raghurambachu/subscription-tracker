@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Layers, Plus, Wallet, Settings, CalendarDays } from 'lucide-react';
 import { useAppState } from '@/hooks/use-app-state';
 import { cn } from '@/lib/utils';
-import { formatINR, getAnnualizedCost } from '@/lib/date-utils';
+import { getAnnualizedCost } from '@/lib/date-utils';
 import { Button } from '@/components/ui/button';
 import { AddListDialog } from '@/components/subscriptions/add-list-dialog';
 import { ThemeToggle } from '@/components/layout/theme-toggle';
@@ -14,7 +14,7 @@ interface SidebarProps {
 }
 
 export function Sidebar({ onOpenSettings, mobileOpen, onMobileClose }: SidebarProps) {
-  const { data, setSelectedListId } = useAppState();
+  const { data, setSelectedListId, formatMoney } = useAppState();
   const [addListOpen, setAddListOpen] = React.useState(false);
 
   const monthlyForList = (listId: string | 'all') => {
@@ -115,7 +115,7 @@ export function Sidebar({ onOpenSettings, mobileOpen, onMobileClose }: SidebarPr
             </span>
           </div>
           <div className="mt-1.5 font-display text-2xl font-semibold text-base-50">
-            {formatINR(monthlyForList(data.selectedListId))}
+            {formatMoney(monthlyForList(data.selectedListId))}
           </div>
           <div className="text-[11px] text-base-400">avg. per month</div>
         </div>

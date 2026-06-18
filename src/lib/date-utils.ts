@@ -205,13 +205,39 @@ export function getMonthlyCost(sub: Subscription): number {
   return getAnnualizedCost(sub) / 12;
 }
 
-export function formatINR(amount: number): string {
+export interface CurrencyInfo {
+  code: string; // ISO 4217
+  symbol: string;
+  label: string;
+  locale: string;
+  noDecimals?: boolean; // for JPY-like currencies
+}
+
+export const CURRENCIES: Record<string, CurrencyInfo> = {
+  INR: { code: 'INR', symbol: '₹', label: 'Indian Rupee', locale: 'en-IN' },
+  USD: { code: 'USD', symbol: '$', label: 'US Dollar', locale: 'en-US' },
+  EUR: { code: 'EUR', symbol: '€', label: 'Euro', locale: 'de-DE' },
+  GBP: { code: 'GBP', symbol: '£', label: 'British Pound', locale: 'en-GB' },
+  JPY: { code: 'JPY', symbol: '¥', label: 'Japanese Yen', locale: 'ja-JP', noDecimals: true },
+  CAD: { code: 'CAD', symbol: 'C$', label: 'Canadian Dollar', locale: 'en-CA' },
+  AUD: { code: 'AUD', symbol: 'A$', label: 'Australian Dollar', locale: 'en-AU' },
+  SGD: { code: 'SGD', symbol: 'S$', label: 'Singapore Dollar', locale: 'en-SG' },
+  AED: { code: 'AED', symbol: 'د.إ', label: 'UAE Dirham', locale: 'ar-AE' },
+  CNY: { code: 'CNY', symbol: '¥', label: 'Chinese Yuan', locale: 'zh-CN' },
+  ZAR: { code: 'ZAR', symbol: 'R', label: 'South African Rand', locale: 'en-ZA' },
+  BRL: { code: 'BRL', symbol: 'R$', label: 'Brazilian Real', locale: 'pt-BR' },
+  MXN: { code: 'MXN', symbol: 'MX$', label: 'Mexican Peso', locale: 'es-MX' },
+};
+
+export function formatCurrency(amount: number, code: string = 'INR'): string {
+  const currency = CURRENCIES[code] ?? CURRENCIES.INR;
   const rounded = Math.round(amount * 100) / 100;
   const isWhole = Math.abs(rounded - Math.round(rounded)) < 0.001;
-  const opts: Intl.NumberFormatOptions = isWhole
+  const useGrouping = currency.noDecimals || isWhole;
+  const opts: Intl.NumberFormatOptions = useGrouping
     ? { maximumFractionDigits: 0 }
     : { minimumFractionDigits: 2, maximumFractionDigits: 2 };
-  return `₹${rounded.toLocaleString('en-IN', opts)}`;
+  return `${currency.symbol}${rounded.toLocaleString(currency.locale, opts)}`;
 }
 
 export function daysUntil(dateStr: string, from: Date = new Date()): number {

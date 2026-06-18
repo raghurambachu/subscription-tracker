@@ -37,6 +37,7 @@ export function createEmptyAppData(): AppData {
     selectedListId: 'all',
     settings: {
       notificationsEnabled: false,
+      currency: 'INR',
     },
   };
 }

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import type { AppData, Subscription, SubList, Category } from '@/lib/types';
 import { loadAppData, saveAppData } from '@/lib/storage';
-import { uid, todayISO } from '@/lib/date-utils';
+import { uid, todayISO, formatCurrency } from '@/lib/date-utils';
 
 interface AppStateContextValue {
   data: AppData;
@@ -19,6 +19,8 @@ interface AppStateContextValue {
   setSelectedListId: (id: string | 'all') => void;
   replaceAllData: (newData: AppData) => void;
   setNotificationsEnabled: (enabled: boolean) => void;
+  setCurrency: (code: string) => void;
+  formatMoney: (amount: number) => string;
 }
 
 const AppStateContext = React.createContext<AppStateContextValue | null>(null);
@@ -136,6 +138,16 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     setData((prev) => ({ ...prev, settings: { ...prev.settings, notificationsEnabled: enabled } }));
   };
 
+  const setCurrency: AppStateContextValue['setCurrency'] = (code) => {
+    setData((prev) => ({ ...prev, settings: { ...prev.settings, currency: code } }));
+  };
+
+  const currency = data.settings.currency ?? 'INR';
+  const formatMoney = React.useCallback(
+    (amount: number) => formatCurrency(amount, currency),
+    [currency]
+  );
+
   const value: AppStateContextValue = {
     data,
     setData,
@@ -152,6 +164,8 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     setSelectedListId,
     replaceAllData,
     setNotificationsEnabled,
+    setCurrency,
+    formatMoney,
   };
 
   return <AppStateContext.Provider value={value}>{children}</AppStateContext.Provider>;

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useAppState } from '@/hooks/use-app-state';
 import {
-  formatINR,
   getNextBillingDate,
   toISODate,
   getMonthlyCost,
@@ -50,7 +49,7 @@ const CYCLE_LABEL: Record<Subscription['billingCycle'], string> = {
 };
 
 export function ListView({ onEdit, onAddNew }: ListViewProps) {
-  const { data, deleteSubscription, toggleStatus } = useAppState();
+  const { data, deleteSubscription, toggleStatus, formatMoney } = useAppState();
   const [sortKey, setSortKey] = React.useState<SortKey>('nextDate');
   const [sortAsc, setSortAsc] = React.useState(true);
   const [statusFilter, setStatusFilter] = React.useState<'all' | 'active' | 'canceled'>('all');
@@ -176,7 +175,7 @@ export function ListView({ onEdit, onAddNew }: ListViewProps) {
                 </div>
                 <div className="shrink-0 text-right">
                   <div className="font-mono-num text-sm font-medium text-base-50">
-                    {formatINR(sub.amount)}
+                    {formatMoney(sub.amount)}
                   </div>
                   <div className="font-mono-num text-[11px] text-base-400">
                     {nextDate === '9999-99-99'
@@ -269,7 +268,7 @@ export function ListView({ onEdit, onAddNew }: ListViewProps) {
                       : new Date(nextDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                   </td>
                   <td className="px-4 py-3 text-right font-mono-num text-sm font-medium text-base-50">
-                    {formatINR(sub.amount)}
+                    {formatMoney(sub.amount)}
                   </td>
                   <td className="px-4 py-3">
                     <Badge variant={isCanceled ? 'coral' : 'mint'}>{isCanceled ? 'Canceled' : 'Active'}</Badge>

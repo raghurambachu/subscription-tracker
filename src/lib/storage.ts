@@ -11,7 +11,8 @@ export function loadAppData(): AppData {
     if (!parsed.lists || !parsed.categories || !parsed.subscriptions) {
       return createEmptyAppData();
     }
-    if (!parsed.settings) parsed.settings = { notificationsEnabled: false };
+    if (!parsed.settings) parsed.settings = { notificationsEnabled: false, currency: 'INR' };
+    if (!parsed.settings.currency) parsed.settings.currency = 'INR';
     return parsed;
   } catch (e) {
     console.error('Failed to load app data', e);
@@ -50,7 +51,8 @@ export function importAppDataFromFile(file: File): Promise<AppData> {
           reject(new Error('Invalid backup file format.'));
           return;
         }
-        if (!parsed.settings) parsed.settings = { notificationsEnabled: false };
+        if (!parsed.settings) parsed.settings = { notificationsEnabled: false, currency: 'INR' };
+        if (!parsed.settings.currency) parsed.settings.currency = 'INR';
         resolve(parsed);
       } catch {
         reject(new Error('Could not parse file as JSON.'));

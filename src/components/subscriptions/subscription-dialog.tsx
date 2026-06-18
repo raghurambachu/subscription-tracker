@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useAppState } from '@/hooks/use-app-state';
 import { CATEGORY_PALETTE } from '@/lib/seed-data';
-import { todayISO } from '@/lib/date-utils';
+import { todayISO, CURRENCIES } from '@/lib/date-utils';
 import type { BillingCycle, HighlightFlag, Subscription } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import {
@@ -68,6 +68,7 @@ function emptyForm() {
 export function SubscriptionDialog({ open, onOpenChange, editId, defaultDate }: SubscriptionDialogProps) {
   const { data, addSubscription, updateSubscription, deleteSubscription, addCategory } = useAppState();
   const { show } = useToast();
+  const currencySymbol = CURRENCIES[data.settings.currency]?.symbol ?? '₹';
 
   const [form, setForm] = React.useState(emptyForm());
   const [newCategoryMode, setNewCategoryMode] = React.useState(false);
@@ -254,7 +255,7 @@ export function SubscriptionDialog({ open, onOpenChange, editId, defaultDate }: 
 
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div className="flex flex-col gap-1.5">
-              <Label htmlFor="sub-amount">Amount (₹)</Label>
+              <Label htmlFor="sub-amount">Amount ({currencySymbol})</Label>
               <Input
                 id="sub-amount"
                 type="number"

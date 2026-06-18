@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useAppState } from '@/hooks/use-app-state';
 import { exportAppDataAsFile, importAppDataFromFile } from '@/lib/storage';
 import { CATEGORY_PALETTE } from '@/lib/seed-data';
+import { CURRENCIES } from '@/lib/date-utils';
 import { cn } from '@/lib/utils';
 import {
   Dialog,
@@ -34,6 +35,7 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
     deleteCategory,
     replaceAllData,
     setNotificationsEnabled,
+    setCurrency,
   } = useAppState();
   const { show } = useToast();
   const fileInputRef = React.useRef<HTMLInputElement>(null);
@@ -116,9 +118,10 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
         </DialogHeader>
 
         <Tabs defaultValue="lists">
-          <TabsList className="grid w-full grid-cols-2 sm:inline-grid sm:w-auto">
+          <TabsList className="flex w-full justify-start overflow-x-auto scrollbar-none sm:inline-flex sm:w-auto sm:overflow-visible">
             <TabsTrigger value="lists">Lists</TabsTrigger>
             <TabsTrigger value="categories">Categories</TabsTrigger>
+            <TabsTrigger value="currency">Currency</TabsTrigger>
             <TabsTrigger value="data">Backup</TabsTrigger>
             <TabsTrigger value="notifications">Reminders</TabsTrigger>
           </TabsList>
@@ -290,6 +293,43 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
                 <Plus className="size-4" />
                 Add
               </Button>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="currency">
+            <div className="flex flex-col gap-3">
+              <p className="text-[12px] text-base-400">
+                Amounts across the app are shown in this currency. The number format follows the currency's locale. Existing subscription amounts are relabeled — no conversion is applied.
+              </p>
+              <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-2">
+                {Object.values(CURRENCIES).map((c) => {
+                  const selected = data.settings.currency === c.code;
+                  return (
+                    <button
+                      key={c.code}
+                      onClick={() => {
+                        setCurrency(c.code);
+                        show(`Currency set to ${c.label}`);
+                      }}
+                      className={cn(
+                        'flex items-center gap-3 rounded-[var(--radius-md)] border px-3 py-2.5 text-left transition-colors',
+                        selected
+                          ? 'border-violet/50 bg-violet-soft'
+                          : 'border-base-700 bg-base-900 hover:bg-base-850'
+                      )}
+                    >
+                      <span className="w-6 shrink-0 text-center font-mono-num text-base font-medium text-base-50">
+                        {c.symbol}
+                      </span>
+                      <span className="min-w-0 flex-1">
+                        <span className="block text-sm text-base-50">{c.code}</span>
+                        <span className="block truncate text-[11px] text-base-400">{c.label}</span>
+                      </span>
+                      {selected && <Check className="size-4 shrink-0 text-violet" />}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </TabsContent>
 

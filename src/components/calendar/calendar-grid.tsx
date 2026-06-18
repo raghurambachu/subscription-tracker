@@ -5,7 +5,6 @@ import {
   isSameDay,
   toISODate,
   WEEKDAY_NAMES_SHORT,
-  formatINR,
 } from '@/lib/date-utils';
 import type { BillingOccurrence } from '@/lib/types';
 import { cn } from '@/lib/utils';
@@ -70,7 +69,7 @@ function highlightIcon(flag: string) {
 }
 
 export function CalendarGrid({ monthDate, onSelectSubscription, onSelectDate }: CalendarGridProps) {
-  const { data } = useAppState();
+  const { data, formatMoney } = useAppState();
 
   const visibleSubs = React.useMemo(
     () =>
@@ -176,7 +175,7 @@ export function CalendarGrid({ monthDate, onSelectSubscription, onSelectDate }: 
                     )}
                   </div>
                   <div className="mt-auto truncate font-mono-num text-[10px] font-medium text-base-200 sm:text-[11px]">
-                    {dayTotal > 0 ? formatINR(dayTotal) : ''}
+                    {dayTotal > 0 ? formatMoney(dayTotal) : ''}
                   </div>
                 </>
               )}
@@ -222,7 +221,7 @@ export function CalendarGrid({ monthDate, onSelectSubscription, onSelectDate }: 
                           <Badge variant="coral" className="shrink-0">canceled</Badge>
                         )}
                         <span className="font-mono-num text-sm text-base-200 shrink-0">
-                          {formatINR(o.subscription.amount)}
+                          {formatMoney(o.subscription.amount)}
                         </span>
                       </button>
                     );
